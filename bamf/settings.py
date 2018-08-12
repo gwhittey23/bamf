@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 # To generate a SECRET_KEY, use The following command:
 # python manage.py generatesecretkey
-SECRET_KEY = '<secret-key>'
+SECRET_KEY = 'iJBE9m&(7u*W#*gndm4lT_tBc(V6OXN#u9UVGRbAF@_el6V*qm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -128,20 +128,24 @@ WSGI_APPLICATION = 'bamf.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bamfproject',
-        'USER': 'bpepple',
-        'PASSWORD': 'bamfpassword',
+        'NAME': 'myproject',
+        'USER': 'myprojectuser',
+        'PASSWORD': 'password',
         'HOST': '',
         'PORT': '',
 
     }
 }
+from huey import RedisHuey
+from redis import ConnectionPool
 
-HUEY = {
+pool = ConnectionPool(host='localhost', port=6379, max_connections=20)
+HUEY = RedisHuey('my-app', connection_pool=pool)
+""" HUEY = {
     'name': 'bamf',
-    'consumer': {'workers': 4, 'worker_type': 'thread'},
+    'consumer': {'workers': 32, 'worker_type': 'thread'},
     'always_eager': False,
-}
+} """
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
