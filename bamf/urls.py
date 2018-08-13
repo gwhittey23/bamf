@@ -15,6 +15,7 @@ from comics.urls import (
     series as series_urls,
     server_settings as settings_urls,
     team as team_urls,
+    readinglists as readinglists_urls,
 )
 
 
@@ -25,6 +26,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/series/page1',
                                   permanent=False)),
     path('arc/', include(arc_urls)),
+    path('readinglists/', include(readinglists_urls)),
     path('character/', include(character_urls)),
     path('creator/', include(creator_urls)),
     path('importer/', include(importer_urls)),

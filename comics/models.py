@@ -200,7 +200,7 @@ class Issue(models.Model):
     slug = models.SlugField(max_length=350, unique=True)
     number = models.CharField('Issue Number', max_length=25)
     date = models.DateField('Cover Date', blank=True)
-    desc = models.TextField('Description', max_length=500, blank=True)
+    desc = models.TextField('Description', max_length=700, blank=True)
     arcs = models.ManyToManyField(Arc, blank=True)
     characters = models.ManyToManyField(Character, blank=True)
     teams = models.ManyToManyField(Team, blank=True)
@@ -245,3 +245,41 @@ class Roles(models.Model):
     class Meta:
         verbose_name_plural = "Roles"
         ordering = ['creator__name']
+
+
+class ReadingLists(models.Model):
+    slug = models.SlugField(max_length=200, unique=True)
+    sort_title = models.CharField('Sort Name', max_length=200)
+    desc = models.TextField('Description', max_length=600, blank=True)
+    name = models.CharField('Series Name', max_length=200)
+    issues = models.ManyToManyField(Issue, blank=True)
+    def __str__(self):
+        return self.name
+
+    @property
+    def issue_count(self):
+        return self.issue_set.all().count()
+
+    @cached_property
+    def unread_issue_count(self):
+        if hasattr(self, '_prefetched_objects_cache') and 'issue' in self._prefetched_objects_cache:
+            return len([x for x in self.issue_set.all() if x.status is not 2])
+        return self.issue_set.exclude(status=2).count()
+
+    @property
+    def average_rating(self):
+        l = []
+        for issue in self.issue_set.all():
+            l.append(issue.id)
+
+        rating = Rating.objects.filter(object_id__in=l).exclude(
+            average=0).aggregate(Avg('average'))
+
+        return rating['average__avg']
+
+    def get_absolute_url(self):
+        return reverse('readinglists:detail', args=[self.slug])
+
+    class Meta:
+        verbose_name_plural = "Reading Lists"
+        ordering = ['id', 'sort_title']

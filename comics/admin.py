@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import (Arc, Character, Creator,
                      Issue, Publisher, Series,
-                     Team, Roles)
+                     Team, Roles,ReadingLists)
 
 from comics.tasks import (refresh_issue_task, refresh_series_task,
                           refresh_publisher_task, refresh_character_task,
@@ -100,7 +100,7 @@ class CreatorAdmin(admin.ModelAdmin):
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
     search_fields = ('series__name',)
-    readonly_fields = ('file', 'cvid', 'cvurl', 'series', 'number')
+    readonly_fields = ('file', 'cvid', 'cvurl', 'series', 'number',)
     list_display = ('__str__', 'status', 'import_date')
     list_filter = ('import_date', 'date', 'status')
     list_select_related = ('series',)
@@ -270,3 +270,11 @@ class RolesAdmin(admin.ModelAdmin):
         (None, {'fields': ('issue', 'creator')}),
         ('Related', {'fields': ('role',)}),
     )
+@admin.register(ReadingLists)
+class ReadingListsAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+    fieldsets = (
+        (None, {'fields': ('name','slug', 'desc', )}),
+        ('Related', {'fields': ('issues',)}),
+    )
+    raw_id_fields = ('issues',)

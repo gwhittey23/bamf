@@ -226,3 +226,4 @@ if DEBUG:
     DEBUG_TOOLBAR_CONFIG = {
         'INTERCEPT_REDIRECTS': False,
     }
+USE_READING_LIST = True
