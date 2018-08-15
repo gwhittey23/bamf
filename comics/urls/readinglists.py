@@ -8,6 +8,7 @@ from comics.views.readinglists import ReadingListsDetail, ReadingListsList, Sear
 app_name = 'readinglists'
 urlpatterns = [
     path('page<int:page>/', ReadingListsList.as_view(), name='list'),
+    path('import/', ReadingListsList.as_view(), name='list'),
     path('<slug:slug>/', ReadingListsDetail.as_view(), name='detail'),
     re_path(r'^search/(?:page(?P<page>\d+)/)?$', SearchReadingListsList.as_view(), name='search'),
 ]

@@ -128,7 +128,7 @@ WSGI_APPLICATION = 'bamf.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'myproject',
+        'NAME': 'myproject2',
         'USER': 'myprojectuser',
         'PASSWORD': 'password',
         'HOST': '',
@@ -136,16 +136,16 @@ DATABASES = {
 
     }
 }
-from huey import RedisHuey
+""" from huey import RedisHuey
 from redis import ConnectionPool
 
 pool = ConnectionPool(host='localhost', port=6379, max_connections=20)
-HUEY = RedisHuey('my-app', connection_pool=pool)
-""" HUEY = {
+HUEY = RedisHuey('my-app', connection_pool=pool) """
+HUEY = {
     'name': 'bamf',
     'consumer': {'workers': 32, 'worker_type': 'thread'},
     'always_eager': False,
-} """
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -177,7 +177,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'EST'
 
 USE_I18N = True
 
